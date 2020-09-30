@@ -161,6 +161,18 @@ RUN mkdir -p /opt && \
 
 ENV PATH $PATH:/opt/gnu-mcu-eclipse/riscv-none-gcc/${RISCV_VERSION}-${RISCV_BUILD}/bin
 
+# Install picolibc Debian package
+ARG PICOLIBC_VERSION=1.4.6-1
+RUN wget -P /tmp http://ftp.de.debian.org/debian/pool/main/p/picolibc/picolibc-riscv64-unknown-elf_${PICOLIBC_VERSION}_all.deb && \
+    dpkg -i /tmp/picolibc-riscv64-unknown-elf_${PICOLIBC_VERSION}_all.deb && \
+    rm /tmp/picolibc-riscv64-unknown-elf_${PICOLIBC_VERSION}_all.deb && \
+    wget -P /tmp http://ftp.de.debian.org/debian/pool/main/p/picolibc/picolibc-arm-none-eabi_${PICOLIBC_VERSION}_all.deb && \
+    dpkg -i /tmp/picolibc-arm-none-eabi_${PICOLIBC_VERSION}_all.deb && \
+    rm /tmp/picolibc-arm-none-eabi_${PICOLIBC_VERSION}_all.deb && \
+    wget -P /tmp http://ftp.de.debian.org/debian/pool/main/p/picolibc/picolibc-xtensa-lx106-elf_${PICOLIBC_VERSION}_all.deb && \
+    dpkg -i /tmp/picolibc-xtensa-lx106-elf_${PICOLIBC_VERSION}_all.deb && \
+    rm /tmp/picolibc-xtensa-lx106-elf_${PICOLIBC_VERSION}_all.deb && \
+
 # compile suid create_user binary
 COPY create_user.c /tmp/create_user.c
 RUN gcc -DHOMEDIR=\"/data/riotbuild\" -DUSERNAME=\"riotbuild\" /tmp/create_user.c -o /usr/local/bin/create_user \
